@@ -1,0 +1,71 @@
+import { NextRequest, NextResponse } from "next/server";
+import { cacheKey, getCache, setCache } from "@/lib/cache";
+import { generateClaudeContent } from "@/lib/claude";
+import { generateStoryboard } from "@/lib/gemini";
+import { checkRateLimit } from "@/lib/rateLimit";
+import { requestSchema } from "@/lib/schema";
+
+function clientIp(req: NextRequest) {
+  const header = req.headers.get("x-forwarded-for");
+  if (header) return header.split(",")[0];
+  // @ts-expect-error NextRequest has ip in node runtime
+  return req.ip || "anonymous";
+}
+
+async function retry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
+  let lastError: unknown = null;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error("Unknown error");
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const input = requestSchema.parse(body);
+    const ip = clientIp(req);
+    const limit = checkRateLimit(ip, Number(process.env.RATE_LIMIT_PER_IP ?? 3));
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { ok: false, error: "Rate limit exceeded", meta: { resetAt: limit.resetAt } },
+        { status: 429 }
+      );
+    }
+
+    const key = cacheKey(input);
+    const cached = getCache(key);
+    if (cached) {
+      return NextResponse.json({
+        ok: true,
+        data: cached,
+        meta: { cached: true, provider: { claude: "sonnet", gemini: process.env.GEMINI_MODEL || "gemini-1.5-pro" }, latency_ms: 0 },
+      });
+    }
+
+    const start = Date.now();
+    const claude = await retry(() => generateClaudeContent(input));
+    const storyboard = await retry(() => generateStoryboard(claude.voiceover, input, claude));
+
+    setCache(key, storyboard);
+
+    return NextResponse.json({
+      ok: true,
+      data: storyboard,
+      meta: {
+        cached: false,
+        provider: { claude: "sonnet", gemini: process.env.GEMINI_MODEL || "gemini-1.5-pro" },
+        latency_ms: Date.now() - start,
+      },
+    });
+  } catch (error) {
+    console.error("/api/generate error", error);
+    const message = error instanceof Error ? error.message : "Unexpected error";
+    const status = message.toLowerCase().includes("rate limit") ? 429 : message.toLowerCase().includes("invalid") ? 400 : 500;
+    return NextResponse.json({ ok: false, error: message }, { status });
+  }
+}
