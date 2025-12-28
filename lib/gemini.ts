@@ -1,48 +1,30 @@
 import { GenerateRequest, StoryboardResult, validateStoryboard } from "./schema";
 import { buildGeminiPrompt, coerceStoryboard } from "./prompts";
+import { getGenerativeModel } from "./vertex";
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-pro";
-const GEMINI_API_KEY =
-  process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GOOGLE_CLOUD_API_KEY;
-const GEMINI_BASE_URL =
-  process.env.GEMINI_API_BASE ||
-  process.env.GOOGLE_CLOUD_API_BASE ||
-  "https://generativelanguage.googleapis.com";
-const GEMINI_URL = `${GEMINI_BASE_URL}/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 async function requestGemini(prompt: string) {
-  if (!GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY/GOOGLE_API_KEY/GOOGLE_CLOUD_API_KEY is missing");
-  }
-
-  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }],
-        },
-      ],
-      generationConfig: {
-        temperature: 0.6,
-        topK: 40,
-        topP: 0.95,
+  const model = getGenerativeModel(GEMINI_MODEL);
+  const result = await model.generateContent({
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: prompt }],
       },
-    }),
+    ],
+    generationConfig: {
+      temperature: 0.6,
+      topK: 40,
+      topP: 0.95,
+    },
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Gemini request failed: ${res.status} ${text}`);
-  }
-
-  return res.json();
+  return result.response;
 }
 
 function extractText(response: any): string {
-  const candidates = response?.candidates || [];
+  const payload = response?.response ?? response;
+  const candidates = payload?.candidates || [];
   const first = candidates[0];
   const parts = first?.content?.parts || [];
   const textPart = parts.find((part: any) => part.text);
@@ -77,7 +59,7 @@ function extractJSON(text: string): string {
 export async function generateStoryboard(
   voiceover: string,
   input: GenerateRequest,
-  claudeMeta: { hook: string; cta: string; titles: string[] }
+  contentMeta: { hook: string; cta: string; titles: string[] }
 ): Promise<StoryboardResult> {
   const prompt = buildGeminiPrompt(voiceover, input);
   const result = await requestGemini(prompt);
@@ -85,9 +67,9 @@ export async function generateStoryboard(
   const parsed = parseStoryboard(text);
   return {
     ...parsed,
-    hook: claudeMeta.hook,
-    cta: claudeMeta.cta,
-    titles: claudeMeta.titles,
+    hook: contentMeta.hook,
+    cta: contentMeta.cta,
+    titles: contentMeta.titles,
     voiceover,
     platform: input.platform,
     duration_sec: input.duration,

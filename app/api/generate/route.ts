@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cacheKey, getCache, setCache } from "@/lib/cache";
-import { generateClaudeContent } from "@/lib/claude";
+import { generateGeminiContent } from "@/lib/content";
 import { generateStoryboard } from "@/lib/gemini";
 import { checkRateLimit } from "@/lib/rateLimit";
 import { requestSchema } from "@/lib/schema";
@@ -37,19 +37,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const contentModel = process.env.GEMINI_TEXT_MODEL || process.env.GEMINI_MODEL || "gemini-1.5-pro";
+    const storyboardModel = process.env.GEMINI_MODEL || "gemini-1.5-pro";
     const key = cacheKey(input);
     const cached = getCache(key);
     if (cached) {
       return NextResponse.json({
         ok: true,
         data: cached,
-        meta: { cached: true, provider: { claude: "sonnet", gemini: process.env.GEMINI_MODEL || "gemini-1.5-pro" }, latency_ms: 0 },
+        meta: {
+          cached: true,
+          provider: { content: contentModel, storyboard: storyboardModel },
+          latency_ms: 0,
+        },
       });
     }
 
     const start = Date.now();
-    const claude = await retry(() => generateClaudeContent(input));
-    const storyboard = await retry(() => generateStoryboard(claude.voiceover, input, claude));
+    const content = await retry(() => generateGeminiContent(input));
+    const storyboard = await retry(() => generateStoryboard(content.voiceover, input, content));
 
     setCache(key, storyboard);
 
@@ -58,7 +64,7 @@ export async function POST(req: NextRequest) {
       data: storyboard,
       meta: {
         cached: false,
-        provider: { claude: "sonnet", gemini: process.env.GEMINI_MODEL || "gemini-1.5-pro" },
+        provider: { content: contentModel, storyboard: storyboardModel },
         latency_ms: Date.now() - start,
       },
     });

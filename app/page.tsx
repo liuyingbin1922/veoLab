@@ -65,7 +65,7 @@ export default function Page() {
       <section className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 shadow-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">输入参数</h2>
-          <span className="text-xs text-slate-400">Claude ➜ Gemini 串联</span>
+          <span className="text-xs text-slate-400">Gemini 文案 ➜ Gemini 分镜</span>
         </div>
         <div className="mt-6 space-y-4 text-sm">
           <TextField label="选题" value={form.topic} onChange={handleChange("topic")} placeholder="例如：3 个让你效率翻倍的 AI 小技巧" required />

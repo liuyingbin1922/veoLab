@@ -1,6 +1,6 @@
 import { GenerateRequest, StoryboardResult } from "./schema";
 
-export function buildClaudePrompt(input: GenerateRequest): string {
+export function buildContentPrompt(input: GenerateRequest): string {
   const { topic, platform, duration, template, persona = "natural", must_include = "", avoid = "" } = input;
   return `选题：${topic}
 平台：${platform}

@@ -1,10 +1,10 @@
-# 分镜视频工厂（Next.js + Claude + Gemini）
+# 分镜视频工厂（Next.js + Gemini）
 
 一个 ToC 运营分镜生成工具：输入选题参数，一键产出爆款标题、旁白脚本、分镜表和逐镜头的 Veo 3 prompt，并支持 Markdown / CSV 导出。
 
 ## 功能
 - 表单输入：平台 / 时长 / 模板 / 人设 / 必须出现 / 禁忌
-- 服务端 `/api/generate` 串联 Claude（标题 + 旁白）与 Gemini（分镜 JSON）
+- 服务端 `/api/generate` 使用 Gemini 双阶段生成标题/旁白与分镜 JSON
 - Zod 校验 + shot 数量/时长约束校正
 - 7 天内存缓存（同参数命中直接返回）
 - IP 级限流（默认每天 3 次，可通过 `RATE_LIMIT_PER_IP` 调整）
@@ -23,14 +23,13 @@
 ## 环境变量
 在项目根目录创建 `.env.local`：
 ```
-ANTHROPIC_API_KEY=your_claude_key
-GEMINI_API_KEY=your_google_api_key                 # 或使用 GOOGLE_API_KEY / GOOGLE_CLOUD_API_KEY
-GOOGLE_API_KEY=your_google_api_key                 # 可选，占位
-GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key     # 可选，占位
-GEMINI_API_BASE=https://generativelanguage.googleapis.com   # 可选，自定义 Google Cloud 入口
-GOOGLE_CLOUD_API_BASE=https://generativelanguage.googleapis.com  # 可选，占位
-CLAUDE_MODEL=claude-3-5-sonnet-20241022           # 可选
-GEMINI_MODEL=gemini-1.5-pro                        # 可选
+GOOGLE_CLOUD_PROJECT=your_gcp_project_id
+VERTEXAI_LOCATION=us-central1                      # 可选，默认 us-central1
+VERTEXAI_API_ENDPOINT=us-central1-aiplatform.googleapis.com  # 可选，自定义 Vertex 入口
+GOOGLE_APPLICATION_CREDENTIALS=/abs/path/service-account.json # 可选，服务账号路径
+VERTEXAI_CREDENTIALS_JSON='{"client_email":"...","private_key":"..."}' # 可选，或使用 JSON 字符串
+GEMINI_TEXT_MODEL=gemini-1.5-pro                   # 可选，文案阶段模型
+GEMINI_MODEL=gemini-1.5-pro                        # 可选，分镜阶段模型
 RATE_LIMIT_PER_IP=3                                # 可选，默认 3
 ```
 
