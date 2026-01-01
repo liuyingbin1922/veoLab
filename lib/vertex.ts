@@ -44,6 +44,10 @@ export function getVertexClient(): VertexAI {
     const inlineCreds = resolveInlineCredentials();
     if (inlineCreds) {
       options.credentials = inlineCreds;
+      // 避免 Vertex SDK 继续读取无效的 GOOGLE_APPLICATION_CREDENTIALS 路径
+      if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        delete process.env.GOOGLE_APPLICATION_CREDENTIALS;
+      }
     } else {
       sanitizeMissingCredentialPath();
     }
