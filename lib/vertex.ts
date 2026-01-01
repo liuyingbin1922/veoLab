@@ -22,6 +22,13 @@ export function getVertexClient(): VertexAI {
     throw new Error("GOOGLE_CLOUD_PROJECT (或 GCP_PROJECT_ID / GOOGLE_PROJECT_ID) 未配置");
   }
   if (!vertexClient) {
+    console.log("[vertex] init", {
+      project: GOOGLE_PROJECT_ID,
+      location: VERTEX_LOCATION,
+      hasInlineCreds: Boolean(INLINE_CREDENTIALS),
+      hasCredentialPath: Boolean(SERVICE_ACCOUNT_PATH),
+      endpoint: VERTEX_ENDPOINT,
+    });
     const options: {
       project: string;
       location: string;
