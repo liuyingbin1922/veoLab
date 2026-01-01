@@ -56,11 +56,29 @@ function resolveInlineCredentials():
     }
   | undefined {
   if (!INLINE_CREDENTIALS) return undefined;
+  const normalized = sanitizeInlineJSON(INLINE_CREDENTIALS);
   try {
-    return JSON.parse(INLINE_CREDENTIALS);
+    const parsed = JSON.parse(normalized);
+    if (parsed && typeof parsed === "object" && typeof parsed.private_key === "string") {
+      parsed.private_key = parsed.private_key.replace(/\\n/g, "\n");
+    }
+    return parsed;
   } catch (error) {
     throw new Error("VERTEXAI_CREDENTIALS_JSON/GOOGLE_APPLICATION_CREDENTIALS_JSON 不是合法 JSON");
   }
+}
+
+function sanitizeInlineJSON(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return trimmed;
+  const startsWithQuote = trimmed.startsWith("'") || trimmed.startsWith('"');
+  const endsWithSameQuote =
+    (trimmed.startsWith("'") && trimmed.endsWith("'")) ||
+    (trimmed.startsWith('"') && trimmed.endsWith('"'));
+  if (startsWithQuote && endsWithSameQuote) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
 }
 
 function sanitizeMissingCredentialPath() {
