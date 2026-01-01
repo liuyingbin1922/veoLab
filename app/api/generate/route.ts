@@ -55,7 +55,14 @@ export async function POST(req: NextRequest) {
 
     const start = Date.now();
     const content = await retry(() => generateGeminiContent(input));
+    
+    // 输出解析后的 content 用于调试
+    console.log("[api] Content result:", JSON.stringify(content, null, 2));
+    
     const storyboard = await retry(() => generateStoryboard(content.voiceover, input, content));
+    
+    // 输出解析后的 storyboard 用于调试
+    console.log("[api] Storyboard result:", JSON.stringify(storyboard, null, 2));
 
     setCache(key, storyboard);
 
@@ -86,6 +93,11 @@ export async function POST(req: NextRequest) {
     
     if (error && typeof error === "object" && "fullResponse" in error) {
       errorResponse.fullResponse = (error as any).fullResponse;
+    }
+    
+    // 如果错误包含 parsed JSON，也返回它
+    if (error && typeof error === "object" && "parsed" in error) {
+      errorResponse.parsed = (error as any).parsed;
     }
     
     const status = errorMessage.toLowerCase().includes("rate limit") ? 429 : errorMessage.toLowerCase().includes("invalid") ? 400 : 500;

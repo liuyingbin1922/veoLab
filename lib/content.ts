@@ -1,5 +1,5 @@
 import { GenerateRequest } from "./schema";
-import { buildContentPrompt, enforceTitles } from "./prompts";
+import { buildContentPrompt } from "./prompts";
 import { getGenerativeModel } from "./vertex";
 
 const GEMINI_TEXT_MODEL = process.env.GEMINI_TEXT_MODEL || process.env.GEMINI_MODEL || "gemini-1.5-pro";
@@ -106,8 +106,9 @@ export async function generateGeminiContent(input: GenerateRequest): Promise<Con
 
   console.log("[content] Parsed JSON:", JSON.stringify(parsed, null, 2));
 
+  // 直接返回解析后的 JSON，不做任何处理
   return {
-    titles: enforceTitles(parsed.titles || []),
+    titles: parsed.titles || [],
     hook: parsed.hook || "",
     voiceover: parsed.voiceover || "",
     cta: parsed.cta || "",

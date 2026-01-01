@@ -1,5 +1,5 @@
-import { GenerateRequest, StoryboardResult, validateStoryboard } from "./schema";
-import { buildGeminiPrompt, coerceStoryboard } from "./prompts";
+import { GenerateRequest, StoryboardResult } from "./schema";
+import { buildGeminiPrompt } from "./prompts";
 import { getGenerativeModel } from "./vertex";
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-pro";
@@ -47,24 +47,6 @@ function cleanText(text: string): string {
   return cleaned.trim();
 }
 
-function parseStoryboard(text: string): StoryboardResult {
-  // 先清理 markdown 代码块
-  const cleaned = cleanText(text);
-  
-  const primary = tryParseJSON(cleaned);
-  const fallback = tryParseJSON(extractJSON(cleaned));
-  const parsed = primary || fallback;
-  
-  if (!parsed) {
-    const error = new Error("Gemini did not return valid JSON");
-    (error as any).rawResponse = text;
-    (error as any).cleanedResponse = cleaned;
-    throw error;
-  }
-  const coerced = coerceStoryboard(parsed as StoryboardResult);
-  return validateStoryboard(coerced);
-}
-
 function tryParseJSON(text: string | null | undefined): any {
   if (!text) return null;
   try {
@@ -103,7 +85,23 @@ export async function generateStoryboard(
   console.log("[storyboard] ===== End Raw Response =====");
   console.log("[storyboard] Full response object:", JSON.stringify(result, null, 2));
   
-  const parsed = parseStoryboard(rawText);
+  // 清理并提取 JSON
+  const cleanedText = cleanText(rawText);
+  console.log("[storyboard] Cleaned text:", cleanedText);
+  
+  const parsed = tryParseJSON(cleanedText) ?? tryParseJSON(extractJSON(cleanedText));
+  
+  if (!parsed) {
+    const error = new Error("Gemini did not return valid JSON");
+    (error as any).rawResponse = rawText;
+    (error as any).cleanedResponse = cleanedText;
+    (error as any).fullResponse = result;
+    throw error;
+  }
+  
+  console.log("[storyboard] Parsed JSON:", JSON.stringify(parsed, null, 2));
+
+  // 直接返回解析后的 JSON，不做任何处理（不调用 coerceStoryboard 和 validateStoryboard）
   return {
     ...parsed,
     hook: contentMeta.hook,
