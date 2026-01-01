@@ -1,0 +1,502 @@
+{
+  "siteUrl": "https://veolab.ai",
+  "words": [
+    {
+      "key": "apple",
+      "grade": "k1",
+      "ipa": "/ˈæp.əl/",
+      "partOfSpeech": "noun",
+      "imageCue": "shiny red apple with a single green leaf on a sunny windowsill",
+      "english": {
+        "title": "Apple",
+        "summary": "Crunchy red fruit kids see in storybooks.",
+        "description": "Teach the word \"apple\" with color cues and tasting actions.",
+        "examples": [
+          { "en": "I crunch a sweet apple at snack time.", "zh": "点心时间我咬一口甜苹果。" },
+          { "en": "The apple is round and shiny.", "zh": "苹果圆圆亮亮的。" }
+        ],
+        "quiz": {
+          "question": "Which picture shows an apple?",
+          "options": [
+            { "en": "Red fruit with a leaf", "zh": "带叶子的红色水果" },
+            { "en": "Blue soccer ball", "zh": "蓝色足球" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Learn how to say and use the word apple with bilingual narration.",
+          "faq": [
+            {
+              "question_en": "How do I explain \"apple\" to first graders?",
+              "answer_en": "Connect to snack time, colors, and crunchy sounds.",
+              "question_zh": "怎么向一年级解释“apple”？",
+              "answer_zh": "结合零食时间、颜色和咬下去的咔嚓声来讲。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "苹果",
+        "summary": "红红脆脆，孩子熟悉的水果。",
+        "description": "从颜色、形状和味道解释“苹果”这个单词。"
+      },
+      "video": {
+        "jobId": "kids-apple-demo",
+        "src": "https://storage.googleapis.com/veo-lab-demos/kids-apple-vertical.mp4",
+        "poster": "https://storage.googleapis.com/veo-lab-demos/kids-apple-cover.jpg"
+      }
+    },
+    {
+      "key": "sun",
+      "grade": "k1",
+      "ipa": "/sʌn/",
+      "partOfSpeech": "noun",
+      "imageCue": "friendly sun doodle rising over playground",
+      "english": {
+        "title": "Sun",
+        "summary": "Warm yellow circle lighting the playground.",
+        "description": "Teach how the sun warms us and lights the day.",
+        "examples": [
+          { "en": "The sun wakes me up in the morning.", "zh": "早晨太阳把我叫醒。" },
+          { "en": "We wear hats when the sun is bright.", "zh": "太阳很亮时我们戴帽子。" }
+        ],
+        "quiz": {
+          "question": "What do we call the bright ball in the sky?",
+          "options": [
+            { "en": "Sun", "zh": "太阳" },
+            { "en": "Moon", "zh": "月亮" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Short bilingual lesson about the sun for kids.",
+          "faq": [
+            {
+              "question_en": "Why teach the sun in English lessons?",
+              "answer_en": "It connects to weather chats and daily routines.",
+              "question_zh": "为什么要教“sun”？",
+              "answer_zh": "它和天气、日常作息紧密相关。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "太阳",
+        "summary": "温暖的黄太阳照亮操场。",
+        "description": "讲太阳如何带来光和暖。"
+      }
+    },
+    {
+      "key": "jump",
+      "grade": "k1",
+      "ipa": "/dʒʌmp/",
+      "partOfSpeech": "verb",
+      "imageCue": "kids hopping over chalk circles",
+      "english": {
+        "title": "Jump",
+        "summary": "Action word kids act out in PE class.",
+        "description": "Use movement and sound effects to show \"jump\".",
+        "examples": [
+          { "en": "We jump like kangaroos.", "zh": "我们像袋鼠一样跳。" },
+          { "en": "Jump over the puddle!", "zh": "跳过水坑！" }
+        ],
+        "quiz": {
+          "question": "Which action is a jump?",
+          "options": [
+            { "en": "Feet leave the ground", "zh": "双脚离地" },
+            { "en": "Take a quiet nap", "zh": "安静午睡" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Teach verbs like jump with bilingual cues.",
+          "faq": [
+            {
+              "question_en": "How to film \"jump\" lessons?",
+              "answer_en": "Use slow motion hops and excited faces.",
+              "question_zh": "怎么拍“jump”课程？",
+              "answer_zh": "让孩子慢动作跳跃，表情兴奋。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "跳",
+        "summary": "身体离地的动作词。",
+        "description": "用游戏展示“jump”。"
+      }
+    },
+    {
+      "key": "happy",
+      "grade": "k1",
+      "ipa": "/ˈhæp.i/",
+      "partOfSpeech": "adjective",
+      "imageCue": "kid drawing smiley faces with chalk",
+      "english": {
+        "title": "Happy",
+        "summary": "Feelings word tied to smiles and hugs.",
+        "description": "Connect \"happy\" to body language and sharing.",
+        "examples": [
+          { "en": "I feel happy when mom hugs me.", "zh": "妈妈抱我时我很开心。" },
+          { "en": "Sharing makes friends happy.", "zh": "分享会让朋友开心。" }
+        ],
+        "quiz": {
+          "question": "Which face looks happy?",
+          "options": [
+            { "en": "Big smile", "zh": "笑眯眯" },
+            { "en": "Crying tears", "zh": "哭泣" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Emotions vocabulary lesson with English narration.",
+          "faq": [
+            {
+              "question_en": "How to add SEL to \"happy\" lessons?",
+              "answer_en": "Ask students to share happy moments while repeating the word.",
+              "question_zh": "如何把情绪教学融入“happy”？",
+              "answer_zh": "让孩子说说快乐瞬间并重复单词。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "开心",
+        "summary": "笑脸和拥抱让孩子理解 happy。",
+        "description": "结合肢体语言讲“happy”。"
+      }
+    },
+    {
+      "key": "blue",
+      "grade": "k1",
+      "ipa": "/bluː/",
+      "partOfSpeech": "adjective",
+      "imageCue": "sky gradient with paper airplanes",
+      "english": {
+        "title": "Blue",
+        "summary": "Color word tied to sky and calm waves.",
+        "description": "Show everyday blue objects and feelings.",
+        "examples": [
+          { "en": "The sky is blue today.", "zh": "今天的天空是蓝色的。" },
+          { "en": "I wear blue shoes.", "zh": "我穿蓝色的鞋。" }
+        ],
+        "quiz": {
+          "question": "Point to something blue.",
+          "options": [
+            { "en": "Ocean water", "zh": "海水" },
+            { "en": "Orange carrot", "zh": "橙色胡萝卜" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Teach the color blue with bilingual prompts.",
+          "faq": [
+            {
+              "question_en": "What props help teach blue?",
+              "answer_en": "Use scarves, sky videos, and crayons.",
+              "question_zh": "教“blue”需要什么道具？",
+              "answer_zh": "用丝巾、天空视频和蜡笔。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "蓝色",
+        "summary": "从天空、海洋讲蓝色。",
+        "description": "用生活物品展示蓝色。"
+      }
+    },
+    {
+      "key": "teacher",
+      "grade": "k1",
+      "ipa": "/ˈtiː.tʃər/",
+      "partOfSpeech": "noun",
+      "imageCue": "smiling teacher kneeling near students",
+      "english": {
+        "title": "Teacher",
+        "summary": "Person who helps us learn every day.",
+        "description": "Focus on caring actions and classroom routines.",
+        "examples": [
+          { "en": "The teacher reads us a story.", "zh": "老师给我们读故事。" },
+          { "en": "I thank my teacher.", "zh": "我感谢我的老师。" }
+        ],
+        "quiz": {
+          "question": "Who is the teacher?",
+          "options": [
+            { "en": "Grown-up helping students", "zh": "帮助学生的大人" },
+            { "en": "Sleeping puppy", "zh": "睡觉的小狗" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Introduce community helper vocabulary.",
+          "faq": [
+            {
+              "question_en": "How to honor teachers in the script?",
+              "answer_en": "Describe gentle coaching moments and gratitude.",
+              "question_zh": "脚本如何体现教师？",
+              "answer_zh": "描写耐心指导和感谢。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "老师",
+        "summary": "每天陪伴学习的人。",
+        "description": "强调老师的关怀和引导。"
+      }
+    },
+    {
+      "key": "friend",
+      "grade": "k1",
+      "ipa": "/frend/",
+      "partOfSpeech": "noun",
+      "imageCue": "two kids sharing stickers",
+      "english": {
+        "title": "Friend",
+        "summary": "People we share with and trust.",
+        "description": "Tie \"friend\" to kindness behaviors.",
+        "examples": [
+          { "en": "My friend shares crayons.", "zh": "我的朋友分享蜡笔。" },
+          { "en": "We help a friend tie shoes.", "zh": "我们帮朋友系鞋带。" }
+        ],
+        "quiz": {
+          "question": "What does a friend do?",
+          "options": [
+            { "en": "Helps and shares", "zh": "帮助和分享" },
+            { "en": "Takes toys away", "zh": "抢走玩具" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Friendship vocabulary with SEL cues.",
+          "faq": [
+            {
+              "question_en": "How to add social tips?",
+              "answer_en": "Model turn-taking and empathy moments.",
+              "question_zh": "如何加入社交技巧？",
+              "answer_zh": "示范轮流和共情。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "朋友",
+        "summary": "朋友会分享和帮助。",
+        "description": "突出善意行为。"
+      }
+    },
+    {
+      "key": "music",
+      "grade": "k1",
+      "ipa": "/ˈmjuː.zɪk/",
+      "partOfSpeech": "noun",
+      "imageCue": "kids tapping rhythm sticks",
+      "english": {
+        "title": "Music",
+        "summary": "Sounds that make us dance and clap.",
+        "description": "Highlight rhythm, instruments, and feelings.",
+        "examples": [
+          { "en": "Music makes us dance.", "zh": "音乐让我们跳舞。" },
+          { "en": "We play music in class.", "zh": "我们在课堂上演奏音乐。" }
+        ],
+        "quiz": {
+          "question": "Which sound is music?",
+          "options": [
+            { "en": "Singing with guitar", "zh": "吉他伴唱" },
+            { "en": "Silent reading", "zh": "安静读书" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Music vocabulary mini-lesson.",
+          "faq": [
+            {
+              "question_en": "What visuals fit music?",
+              "answer_en": "Use rhythm sticks, dancing kids, and notes.",
+              "question_zh": "音乐主题适合哪些画面？",
+              "answer_zh": "节奏棒、跳舞的孩子和音符。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "音乐",
+        "summary": "让人拍手跳舞的声音。",
+        "description": "用乐器展示音乐。"
+      }
+    },
+    {
+      "key": "robot",
+      "grade": "k1",
+      "ipa": "/ˈroʊ.bɑːt/",
+      "partOfSpeech": "noun",
+      "imageCue": "cute cardboard robot project",
+      "english": {
+        "title": "Robot",
+        "summary": "Helper machine kids build from boxes.",
+        "description": "Blend STEM curiosity and imagination.",
+        "examples": [
+          { "en": "The robot helps pick up blocks.", "zh": "机器人帮忙收积木。" },
+          { "en": "We pretend to talk like robots.", "zh": "我们学机器人说话。" }
+        ],
+        "quiz": {
+          "question": "Which object is a robot?",
+          "options": [
+            { "en": "Moving machine", "zh": "会动的机器" },
+            { "en": "Soft pillow", "zh": "柔软枕头" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Introduce STEM word robot with bilingual hook.",
+          "faq": [
+            {
+              "question_en": "How to visualize robots for kids?",
+              "answer_en": "Cardboard builds, friendly lights, big buttons.",
+              "question_zh": "怎样在画面展示机器人？",
+              "answer_zh": "用纸箱制作、彩灯和大按钮。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "机器人",
+        "summary": "会动会帮忙的机器。",
+        "description": "结合想象力讲机器人。"
+      }
+    },
+    {
+      "key": "panda",
+      "grade": "k1",
+      "ipa": "/ˈpæn.də/",
+      "partOfSpeech": "noun",
+      "imageCue": "playful panda plush in bamboo corner",
+      "english": {
+        "title": "Panda",
+        "summary": "Black and white bear kids adore.",
+        "description": "Teach facts about pandas eating bamboo.",
+        "examples": [
+          { "en": "The panda munches bamboo.", "zh": "熊猫咬着竹子。" },
+          { "en": "Pandas are gentle.", "zh": "熊猫很温和。" }
+        ],
+        "quiz": {
+          "question": "What do pandas eat?",
+          "options": [
+            { "en": "Bamboo", "zh": "竹子" },
+            { "en": "Ice cream", "zh": "冰淇淋" }
+          ],
+          "answer_index": 0
+        },
+        "seo": {
+          "description": "Animal vocabulary story about pandas.",
+          "faq": [
+            {
+              "question_en": "How to show pandas on screen?",
+              "answer_en": "Use plush toys, bamboo props, and calm forests.",
+              "question_zh": "画面如何呈现熊猫？",
+              "answer_zh": "使用玩偶、竹子和安静森林。"
+            }
+          ]
+        }
+      },
+      "chinese": {
+        "title": "熊猫",
+        "summary": "黑白相间的可爱熊。",
+        "description": "讲熊猫吃竹子。"
+      }
+    }
+  ],
+  "grammar": [
+    {
+      "key": "is-am-are",
+      "grade": "k1",
+      "english": {
+        "title": "Be verbs: is / am / are",
+        "summary": "Link each form to simple subjects.",
+        "description": "Kids practice matching pronouns with the right \"be\" verb.",
+        "faq": [
+          {
+            "question_en": "How to keep be-verbs fun?",
+            "answer_en": "Use name tags, chants, and quick checks.",
+            "question_zh": "怎么让 be 动词课堂有趣？",
+            "answer_zh": "用名牌、口号和即时反馈。"
+          }
+        ]
+      },
+      "chinese": {
+        "title": "be 动词 is/am/are",
+        "summary": "和主语搭配的三个形式。",
+        "description": "配对代词和正确形式。"
+      },
+      "rule": {
+        "title": "Use is / am / are",
+        "zh_title": "is / am / are 用法",
+        "overview": "Match short sentences with the right helper verb.",
+        "steps": [
+          "IS goes with he/she/it and single nouns.",
+          "AM goes only with I.",
+          "ARE matches you/we/they.",
+          "Read the subject first, then pick the helper."
+        ],
+        "examples": [
+          { "pattern": "I am ___", "en": "I am happy.", "zh": "I am happy.（我很开心）" },
+          { "pattern": "She is ___", "en": "She is my friend.", "zh": "She is my friend.（她是我的朋友）" },
+          { "pattern": "They are ___", "en": "They are ready.", "zh": "They are ready.（他们准备好了）" }
+        ]
+      },
+      "quiz": {
+        "question": "Fill in the blank: They __ playing.",
+        "answer": "are",
+        "explanation": "They takes are."
+      },
+      "video": {
+        "jobId": "kids-grammar-be-demo",
+        "src": "https://storage.googleapis.com/veo-lab-demos/kids-be-grammar.mp4",
+        "poster": "https://storage.googleapis.com/veo-lab-demos/kids-be-grammar.jpg"
+      }
+    },
+    {
+      "key": "this-that",
+      "grade": "k1",
+      "english": {
+        "title": "This vs. That",
+        "summary": "Demonstrate near and far with props.",
+        "description": "Teach pointing words using camera distance.",
+        "faq": [
+          {
+            "question_en": "How to show distance on camera?",
+            "answer_en": "Use dolly shots and forced perspective props.",
+            "question_zh": "镜头里怎么表现距离？",
+            "answer_zh": "用推拉镜头和大小道具。"
+          }
+        ]
+      },
+      "chinese": {
+        "title": "this / that",
+        "summary": "近的用 this，远的用 that。",
+        "description": "配合指向动作讲解。"
+      },
+      "rule": {
+        "title": "Pointing words",
+        "zh_title": "指示代词",
+        "overview": "Use THIS for items close to you and THAT for items farther away.",
+        "steps": [
+          "Hold the item near your chest to say THIS.",
+          "Stretch your arm or zoom out for THAT.",
+          "Match nouns: this book, that kite.",
+          "Ask questions: What's this? What's that?"
+        ],
+        "examples": [
+          { "pattern": "This is ___", "en": "This is my pen.", "zh": "This is my pen.（这是我的笔）" },
+          { "pattern": "That is ___", "en": "That is a big kite.", "zh": "That is a big kite.（那是一只大风筝）" }
+        ]
+      },
+      "quiz": {
+        "question": "_____ is my backpack (right next to me).",
+        "answer": "This",
+        "explanation": "Use THIS for something close."
+      }
+    }
+  ]
+}

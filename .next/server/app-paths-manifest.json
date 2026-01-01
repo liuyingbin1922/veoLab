@@ -1,5 +1,17 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/api/kids-english/jobs/route": "app/api/kids-english/jobs/route.js",
+  "/api/kids-english/plan/route": "app/api/kids-english/plan/route.js",
   "/api/generate/route": "app/api/generate/route.js",
-  "/page": "app/page.js"
+  "/create/page": "app/create/page.js",
+  "/page": "app/page.js",
+  "/en/grammar/page": "app/en/grammar/page.js",
+  "/en/words/[word]/page": "app/en/words/[word]/page.js",
+  "/en/grammar/[slug]/page": "app/en/grammar/[slug]/page.js",
+  "/zh/grammar/[slug]/page": "app/zh/grammar/[slug]/page.js",
+  "/en/words/page": "app/en/words/page.js",
+  "/zh/words/page": "app/zh/words/page.js",
+  "/zh/words/[word]/page": "app/zh/words/[word]/page.js",
+  "/zh/grammar/page": "app/zh/grammar/page.js"
 }

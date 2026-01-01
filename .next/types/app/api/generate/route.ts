@@ -2,6 +2,8 @@
 import * as entry from '../../../../../app/api/generate/route.js'
 import type { NextRequest } from 'next/server.js'
 
+import type { PrefetchForTypeCheckInternal } from 'next/dist/build/segment-config/app/app-segment-config.js'
+
 type TEntry = typeof import('../../../../../app/api/generate/route.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
@@ -19,6 +21,7 @@ checkFields<Diff<{
   PATCH?: Function
   config?: {}
   generateStaticParams?: Function
+  unstable_prefetch?: PrefetchForTypeCheckInternal
   revalidate?: RevalidateRange<TEntry> | false
   dynamic?: 'auto' | 'force-dynamic' | 'error' | 'force-static'
   dynamicParams?: boolean

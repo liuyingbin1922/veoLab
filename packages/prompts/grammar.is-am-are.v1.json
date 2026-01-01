@@ -1,0 +1,168 @@
+{
+  "id": "kids-english-grammar.is-am-are.v1",
+  "version": "1.0.0",
+  "type": "grammar",
+  "title": "Kids English Grammar (is/am/are)",
+  "description": "Explain a simple grammar rule with bilingual narration and 9:16 class-room visuals.",
+  "lang_pair": "en+zh",
+  "segment_seconds": 6,
+  "prompt": "Teach the target grammar rule through 4 short beats: hook story, rule breakdown, examples, practice question. Narration is English, subtitles are Simplified Chinese. Include creative kid-friendly shots, Veo prompts for 9:16 stylized learning video, and highlight how to answer correctly.",
+  "output_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+      "meta",
+      "rule",
+      "storyboard",
+      "veo_segments"
+    ],
+    "properties": {
+      "meta": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "key",
+          "grade",
+          "lang_pair",
+          "aspect_ratio",
+          "segment_seconds",
+          "seo"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "const": "grammar" },
+          "key": { "type": "string" },
+          "grade": { "type": "string" },
+          "lang_pair": { "const": "zh+en" },
+          "aspect_ratio": { "const": "9:16" },
+          "segment_seconds": { "type": "integer", "enum": [6] },
+          "seo": {
+            "type": "object",
+            "required": [
+              "title_en",
+              "title_zh",
+              "description_en",
+              "description_zh",
+              "faq"
+            ],
+            "properties": {
+              "title_en": { "type": "string" },
+              "title_zh": { "type": "string" },
+              "description_en": { "type": "string" },
+              "description_zh": { "type": "string" },
+              "faq": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "question_en",
+                    "answer_en",
+                    "question_zh",
+                    "answer_zh"
+                  ],
+                  "properties": {
+                    "question_en": { "type": "string" },
+                    "answer_en": { "type": "string" },
+                    "question_zh": { "type": "string" },
+                    "answer_zh": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "rule": {
+        "type": "object",
+        "required": [
+          "title",
+          "zh_title",
+          "overview",
+          "steps",
+          "examples"
+        ],
+        "properties": {
+          "title": { "type": "string" },
+          "zh_title": { "type": "string" },
+          "overview": { "type": "string" },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "examples": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["pattern", "en", "zh"],
+              "properties": {
+                "pattern": { "type": "string" },
+                "en": { "type": "string" },
+                "zh": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "storyboard": {
+        "type": "array",
+        "minItems": 4,
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "sec",
+            "title",
+            "english_line",
+            "chinese_line",
+            "visual_prompt",
+            "veo_prompt",
+            "camera",
+            "shot_type",
+            "bgm",
+            "note"
+          ],
+          "properties": {
+            "id": { "type": "string" },
+            "sec": { "type": "integer", "enum": [6] },
+            "title": { "type": "string" },
+            "english_line": { "type": "string" },
+            "chinese_line": { "type": "string" },
+            "visual_prompt": { "type": "string" },
+            "veo_prompt": { "type": "string" },
+            "camera": { "type": "string" },
+            "shot_type": { "type": "string" },
+            "bgm": { "type": "string" },
+            "note": { "type": "string" }
+          }
+        }
+      },
+      "veo_segments": {
+        "type": "array",
+        "minItems": 4,
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "sec",
+            "veo_prompt",
+            "negative_prompt",
+            "voiceover_en",
+            "subtitle_zh"
+          ],
+          "properties": {
+            "id": { "type": "string" },
+            "sec": { "type": "integer", "enum": [6] },
+            "veo_prompt": { "type": "string" },
+            "negative_prompt": { "type": "string" },
+            "voiceover_en": { "type": "string" },
+            "subtitle_zh": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
