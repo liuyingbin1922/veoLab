@@ -29,6 +29,7 @@ export function getVertexClient(): VertexAI {
       hasCredentialPath: Boolean(SERVICE_ACCOUNT_PATH),
       endpoint: VERTEX_ENDPOINT,
     });
+
     const options: {
       project: string;
       location: string;
@@ -38,19 +39,25 @@ export function getVertexClient(): VertexAI {
       project: GOOGLE_PROJECT_ID,
       location: VERTEX_LOCATION,
     };
+
     if (VERTEX_ENDPOINT) {
       options.apiEndpoint = VERTEX_ENDPOINT;
     }
+
     const inlineCreds = resolveInlineCredentials();
     if (inlineCreds) {
+      console.log("[vertex] using inline credentials");
       options.credentials = inlineCreds;
-      // 避免 Vertex SDK 继续读取无效的 GOOGLE_APPLICATION_CREDENTIALS 路径
+      // 在创建 VertexAI 实例之前就删除环境变量，避免 SDK 读取无效路径
       if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        console.log("[vertex] removing GOOGLE_APPLICATION_CREDENTIALS to use inline credentials");
         delete process.env.GOOGLE_APPLICATION_CREDENTIALS;
       }
     } else {
+      console.log("[vertex] checking credential file path");
       sanitizeMissingCredentialPath();
     }
+
     vertexClient = new VertexAI(options);
   }
   return vertexClient;
