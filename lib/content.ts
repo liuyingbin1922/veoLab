@@ -39,6 +39,22 @@ function extractText(response: any): string {
   return textPart?.text || "";
 }
 
+// 清理文本，移除 markdown 代码块标记
+function cleanText(text: string): string {
+  if (!text) return text;
+  
+  // 移除 markdown 代码块标记（```json 或 ```）
+  let cleaned = text.trim();
+  
+  // 移除开头的 ```json 或 ```
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "");
+  
+  // 移除结尾的 ```
+  cleaned = cleaned.replace(/\s*```$/g, "");
+  
+  return cleaned.trim();
+}
+
 function tryParseJSON(text: string | null | undefined): any {
   if (!text) return null;
   try {
@@ -49,19 +65,46 @@ function tryParseJSON(text: string | null | undefined): any {
 }
 
 function extractJSON(text: string): string {
-  const match = text.match(/\{[\s\S]*\}/);
+  // 先清理 markdown 代码块
+  const cleaned = cleanText(text);
+  
+  // 尝试直接解析清理后的文本
+  if (tryParseJSON(cleaned)) {
+    return cleaned;
+  }
+  
+  // 如果不行，尝试提取 JSON 对象
+  const match = cleaned.match(/\{[\s\S]*\}/);
   return match?.[0] ?? "";
 }
 
 export async function generateGeminiContent(input: GenerateRequest): Promise<ContentResult> {
   const prompt = buildContentPrompt(input);
   const response = await requestGeminiText(prompt);
-  const text = extractText(response);
-  const parsed = tryParseJSON(text) ?? tryParseJSON(extractJSON(text));
+  const rawText = extractText(response);
+  
+  // 输出原始响应用于调试
+  console.log("[content] ===== Raw Gemini Response =====");
+  console.log(rawText);
+  console.log("[content] ===== End Raw Response =====");
+  console.log("[content] Full response object:", JSON.stringify(response, null, 2));
+  
+  // 清理并提取 JSON
+  const cleanedText = cleanText(rawText);
+  console.log("[content] Cleaned text:", cleanedText);
+  
+  const parsed = tryParseJSON(cleanedText) ?? tryParseJSON(extractJSON(cleanedText));
 
   if (!parsed) {
-    throw new Error("Gemini response is not valid JSON");
+    // 如果 JSON 解析失败，抛出包含原始文本的错误
+    const error = new Error("Gemini response is not valid JSON");
+    (error as any).rawResponse = rawText;
+    (error as any).cleanedResponse = cleanedText;
+    (error as any).fullResponse = response;
+    throw error;
   }
+
+  console.log("[content] Parsed JSON:", JSON.stringify(parsed, null, 2));
 
   return {
     titles: enforceTitles(parsed.titles || []),

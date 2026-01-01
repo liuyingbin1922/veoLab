@@ -70,8 +70,25 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("/api/generate error", error);
-    const message = error instanceof Error ? error.message : "Unexpected error";
-    const status = message.toLowerCase().includes("rate limit") ? 429 : message.toLowerCase().includes("invalid") ? 400 : 500;
-    return NextResponse.json({ ok: false, error: message }, { status });
+    
+    // 如果错误包含原始响应，在返回中也包含它
+    const errorMessage = error instanceof Error ? error.message : "Unexpected error";
+    const errorResponse: any = { ok: false, error: errorMessage };
+    
+    if (error && typeof error === "object" && "rawResponse" in error) {
+      errorResponse.rawResponse = (error as any).rawResponse;
+      console.error("/api/generate raw response:", (error as any).rawResponse);
+    }
+    
+    if (error && typeof error === "object" && "cleanedResponse" in error) {
+      errorResponse.cleanedResponse = (error as any).cleanedResponse;
+    }
+    
+    if (error && typeof error === "object" && "fullResponse" in error) {
+      errorResponse.fullResponse = (error as any).fullResponse;
+    }
+    
+    const status = errorMessage.toLowerCase().includes("rate limit") ? 429 : errorMessage.toLowerCase().includes("invalid") ? 400 : 500;
+    return NextResponse.json(errorResponse, { status });
   }
 }

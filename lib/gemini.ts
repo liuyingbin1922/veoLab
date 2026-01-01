@@ -31,12 +31,35 @@ function extractText(response: any): string {
   return textPart?.text || "";
 }
 
+// 清理文本，移除 markdown 代码块标记
+function cleanText(text: string): string {
+  if (!text) return text;
+  
+  // 移除 markdown 代码块标记（```json 或 ```）
+  let cleaned = text.trim();
+  
+  // 移除开头的 ```json 或 ```
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "");
+  
+  // 移除结尾的 ```
+  cleaned = cleaned.replace(/\s*```$/g, "");
+  
+  return cleaned.trim();
+}
+
 function parseStoryboard(text: string): StoryboardResult {
-  const primary = tryParseJSON(text);
-  const fallback = tryParseJSON(extractJSON(text));
+  // 先清理 markdown 代码块
+  const cleaned = cleanText(text);
+  
+  const primary = tryParseJSON(cleaned);
+  const fallback = tryParseJSON(extractJSON(cleaned));
   const parsed = primary || fallback;
+  
   if (!parsed) {
-    throw new Error("Gemini did not return valid JSON");
+    const error = new Error("Gemini did not return valid JSON");
+    (error as any).rawResponse = text;
+    (error as any).cleanedResponse = cleaned;
+    throw error;
   }
   const coerced = coerceStoryboard(parsed as StoryboardResult);
   return validateStoryboard(coerced);
@@ -52,7 +75,16 @@ function tryParseJSON(text: string | null | undefined): any {
 }
 
 function extractJSON(text: string): string {
-  const match = text.match(/\{[\s\S]*\}/);
+  // 先清理 markdown 代码块
+  const cleaned = cleanText(text);
+  
+  // 尝试直接解析清理后的文本
+  if (tryParseJSON(cleaned)) {
+    return cleaned;
+  }
+  
+  // 如果不行，尝试提取 JSON 对象
+  const match = cleaned.match(/\{[\s\S]*\}/);
   return match?.[0] ?? "";
 }
 
@@ -63,8 +95,15 @@ export async function generateStoryboard(
 ): Promise<StoryboardResult> {
   const prompt = buildGeminiPrompt(voiceover, input);
   const result = await requestGemini(prompt);
-  const text = extractText(result);
-  const parsed = parseStoryboard(text);
+  const rawText = extractText(result);
+  
+  // 输出原始响应用于调试
+  console.log("[storyboard] ===== Raw Gemini Response =====");
+  console.log(rawText);
+  console.log("[storyboard] ===== End Raw Response =====");
+  console.log("[storyboard] Full response object:", JSON.stringify(result, null, 2));
+  
+  const parsed = parseStoryboard(rawText);
   return {
     ...parsed,
     hook: contentMeta.hook,
