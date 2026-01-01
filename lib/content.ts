@@ -24,7 +24,7 @@ async function requestGeminiText(prompt: string) {
       temperature: 0.6,
       topK: 40,
       topP: 0.95,
-      maxOutputTokens: 1200,
+      maxOutputTokens: 65535,
     },
   });
   return result.response;
