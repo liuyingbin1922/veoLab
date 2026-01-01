@@ -101,9 +101,36 @@ export async function generateStoryboard(
   
   console.log("[storyboard] Parsed JSON:", JSON.stringify(parsed, null, 2));
 
-  // 直接返回解析后的 JSON，不做任何处理（不调用 coerceStoryboard 和 validateStoryboard）
+  // 提取 shots，支持多种数据结构
+  let shots: any[] = [];
+  if (parsed.shots && Array.isArray(parsed.shots)) {
+    shots = parsed.shots;
+  } else if (parsed.video_script?.shots && Array.isArray(parsed.video_script.shots)) {
+    shots = parsed.video_script.shots;
+  } else if (parsed.video_script && Array.isArray(parsed.video_script)) {
+    shots = parsed.video_script;
+  }
+
+  // 转换字段名，做兜底兼容处理
+  const transformedShots = shots.map((shot: any, index: number) => {
+    // 字段映射，如果映射不上则使用原始值或默认值
+    return {
+      shot: shot.shot ?? shot.shot_num ?? index + 1,
+      sec: shot.sec ?? shot.duration ?? 0,
+      visual: shot.visual ?? shot.veo_prompt ?? "",
+      camera: shot.camera ?? "",
+      subtitle: shot.subtitle ?? shot.voiceover ?? "",
+      bgm_sfx: shot.bgm_sfx ?? "",
+      veo_prompt: shot.veo_prompt ?? "",
+      negative_prompt: shot.negative_prompt ?? "",
+      // 保留所有原始字段，以便前端可以访问
+      ...shot,
+    };
+  });
+
+  // 返回数据，保留原始结构的同时添加必需字段
   return {
-    ...parsed,
+    shots: transformedShots,
     hook: contentMeta.hook,
     cta: contentMeta.cta,
     titles: contentMeta.titles,
@@ -112,5 +139,7 @@ export async function generateStoryboard(
     duration_sec: input.duration,
     template: input.template,
     style: "to_c_natural",
-  };
+    // 保留原始解析的数据，以便调试和兜底
+    _raw: parsed,
+  } as any;
 }

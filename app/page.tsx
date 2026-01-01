@@ -58,8 +58,11 @@ export default function Page() {
 
   const copy = (text: string) => navigator.clipboard.writeText(text);
 
+  // 确保 shots 存在，做兜底处理
+  const shots = result?.shots || [];
+  
   const markdown = useMemo(() => (result ? toMarkdown({ ...result, voiceover: voiceoverDraft }) : ""), [result, voiceoverDraft]);
-  const csv = useMemo(() => (result ? toCsv(result.shots) : ""), [result]);
+  const csv = useMemo(() => (result && shots.length > 0 ? toCsv(shots) : ""), [result, shots]);
 
   return (
     <main className="grid gap-6 lg:grid-cols-[1.1fr,1.3fr]">
@@ -204,16 +207,16 @@ export default function Page() {
                       </tr>
                     </thead>
                     <tbody>
-                      {result.shots.map((shot) => (
-                        <tr key={shot.shot} className="border-b border-slate-800 bg-slate-950/40">
-                          <td className="px-3 py-2">{shot.shot}</td>
-                          <td className="px-3 py-2">{shot.sec}s</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.visual}</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.camera}</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.subtitle}</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.bgm_sfx}</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.veo_prompt}</td>
-                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.negative_prompt}</td>
+                      {shots.map((shot: any, idx: number) => (
+                        <tr key={shot.shot || idx} className="border-b border-slate-800 bg-slate-950/40">
+                          <td className="px-3 py-2">{shot.shot ?? shot.shot_num ?? idx + 1}</td>
+                          <td className="px-3 py-2">{shot.sec ?? shot.duration ?? 0}s</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.visual ?? shot.veo_prompt ?? ""}</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.camera ?? ""}</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.subtitle ?? shot.voiceover ?? ""}</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.bgm_sfx ?? ""}</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.veo_prompt ?? ""}</td>
+                          <td className="px-3 py-2 max-w-xs whitespace-pre-line">{shot.negative_prompt ?? ""}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -229,18 +232,25 @@ export default function Page() {
                   </button>
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
-                  {result.shots.map((shot) => (
-                    <div key={shot.shot} className="rounded-xl border border-slate-800 bg-slate-950/60 p-3 shadow">
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span>镜头 {shot.shot}</span>
-                        <button className="text-indigo-300 hover:text-indigo-200" onClick={() => copy(shot.veo_prompt)}>
-                          复制
-                        </button>
+                  {shots.map((shot: any, idx: number) => {
+                    const shotNum = shot.shot ?? shot.shot_num ?? idx + 1;
+                    const veoPrompt = shot.veo_prompt ?? "";
+                    const negativePrompt = shot.negative_prompt ?? "";
+                    return (
+                      <div key={shotNum} className="rounded-xl border border-slate-800 bg-slate-950/60 p-3 shadow">
+                        <div className="flex items-center justify-between text-xs text-slate-400">
+                          <span>镜头 {shotNum}</span>
+                          {veoPrompt && (
+                            <button className="text-indigo-300 hover:text-indigo-200" onClick={() => copy(veoPrompt)}>
+                              复制
+                            </button>
+                          )}
+                        </div>
+                        {veoPrompt && <p className="mt-2 text-sm text-slate-100 whitespace-pre-line">{veoPrompt}</p>}
+                        {negativePrompt && <p className="mt-2 text-xs text-rose-300">Negative: {negativePrompt}</p>}
                       </div>
-                      <p className="mt-2 text-sm text-slate-100 whitespace-pre-line">{shot.veo_prompt}</p>
-                      <p className="mt-2 text-xs text-rose-300">Negative: {shot.negative_prompt}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -257,9 +267,9 @@ export default function Page() {
                 >
                   导出 CSV
                 </button>
-                {result && result.shots?.length > 0 && (
+                {result && shots.length > 0 && (
                   <span className="rounded-lg border border-slate-800 px-3 py-2 text-xs text-slate-400">
-                    时长 {result.duration_sec}s · {result.shots.length} 镜头 {result.shots.reduce((acc, s) => acc + s.sec, 0)}s
+                    时长 {result.duration_sec ?? 0}s · {shots.length} 镜头 {shots.reduce((acc: number, s: any) => acc + (s.sec ?? s.duration ?? 0), 0)}s
                   </span>
                 )}
               </div>
@@ -322,30 +332,45 @@ function Badge({ children }: { children: React.ReactNode }) {
   return <span className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1 text-xs text-slate-300">{children}</span>;
 }
 
-function toMarkdown(result: StoryboardResult): string {
-  const header = `# 分镜视频工厂输出\n\n- 平台：${result.platform}\n- 时长：${result.duration_sec}s\n- 模板：${result.template}\n`;
-  const titles = `\n## 爆款标题\n${result.titles.map((t, i) => `${i + 1}. ${t}`).join("\n")}`;
-  const voiceover = `\n## 旁白\n\n${result.voiceover}`;
+function toMarkdown(result: any): string {
+  const shots = result.shots || [];
+  const header = `# 分镜视频工厂输出\n\n- 平台：${result.platform || ""}\n- 时长：${result.duration_sec || 0}s\n- 模板：${result.template || ""}\n`;
+  const titles = `\n## 爆款标题\n${(result.titles || []).map((t: string, i: number) => `${i + 1}. ${t}`).join("\n")}`;
+  const voiceover = `\n## 旁白\n\n${result.voiceover || ""}`;
   const tableHeader = "| 镜头 | 秒数 | 画面 | 镜头语言 | 字幕 | BGM/SFX | Veo Prompt | Negative |\n| --- | --- | --- | --- | --- | --- | --- | --- |";
-  const tableBody = result.shots
+  const tableBody = shots
     .map(
-      (shot) =>
-        `| ${shot.shot} | ${shot.sec}s | ${escapePipe(shot.visual)} | ${escapePipe(shot.camera)} | ${escapePipe(
-          shot.subtitle
-        )} | ${escapePipe(shot.bgm_sfx)} | ${escapePipe(shot.veo_prompt)} | ${escapePipe(shot.negative_prompt)} |`
+      (shot: any) =>
+        `| ${shot.shot ?? shot.shot_num ?? ""} | ${shot.sec ?? shot.duration ?? 0}s | ${escapePipe(shot.visual ?? shot.veo_prompt ?? "")} | ${escapePipe(shot.camera ?? "")} | ${escapePipe(
+          shot.subtitle ?? shot.voiceover ?? ""
+        )} | ${escapePipe(shot.bgm_sfx ?? "")} | ${escapePipe(shot.veo_prompt ?? "")} | ${escapePipe(shot.negative_prompt ?? "")} |`
     )
     .join("\n");
-  const veoPrompts = result.shots
-    .map((shot) => `### 镜头 ${shot.shot}\n\n**Veo Prompt**: ${shot.veo_prompt}\n\n**Negative**: ${shot.negative_prompt}`)
+  const veoPrompts = shots
+    .map((shot: any) => {
+      const shotNum = shot.shot ?? shot.shot_num ?? "";
+      const veoPrompt = shot.veo_prompt ?? "";
+      const negativePrompt = shot.negative_prompt ?? "";
+      return `### 镜头 ${shotNum}\n\n**Veo Prompt**: ${veoPrompt}\n\n**Negative**: ${negativePrompt}`;
+    })
     .join("\n\n");
   return `${header}${titles}${voiceover}\n\n## 分镜表\n${tableHeader}\n${tableBody}\n\n## Veo Prompts\n${veoPrompts}`;
 }
 
-function toCsv(shots: StoryboardResult["shots"]): string {
+function toCsv(shots: any[]): string {
   const header = ["shot", "sec", "visual", "camera", "subtitle", "bgm_sfx", "veo_prompt", "negative_prompt"].join(",");
   const rows = shots
-    .map((shot) =>
-      [shot.shot, shot.sec, shot.visual, shot.camera, shot.subtitle, shot.bgm_sfx, shot.veo_prompt, shot.negative_prompt]
+    .map((shot: any) =>
+      [
+        shot.shot ?? shot.shot_num ?? "",
+        shot.sec ?? shot.duration ?? 0,
+        shot.visual ?? shot.veo_prompt ?? "",
+        shot.camera ?? "",
+        shot.subtitle ?? shot.voiceover ?? "",
+        shot.bgm_sfx ?? "",
+        shot.veo_prompt ?? "",
+        shot.negative_prompt ?? "",
+      ]
         .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
         .join(",")
     )
